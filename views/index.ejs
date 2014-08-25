@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/bower_components/metro-ui-css/min/metro-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/override.css">
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.widget.js"></script>
+    <script src="/bower_components/metro-ui-css/min/metro.min.js"></script>
+    <script src="/js/sockrage/socket.io.js"></script>
+    <script src="/js/sockrage/sockrage.js"></script>
+    <script src="/js/pictionary.js"></script>
+    <script src="/js/webchat.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
+</head>
+
+<body class="metro">
+<div class="container">
+    <nav class="navigation-bar">
+        <nav class="navigation-bar-content">
+            <div class="element">
+                <span class="icon-grid-view"> ULTRASUPERNEW PICTIONARY</span>
+            </div>
+        </nav>
+    </nav>
+</div>
+
+<canvas id="can" width="960" height="590" style="border:2px dashed cornflowerblue;margin-top:20px;display: block;margin-left: auto; margin-right: auto;"></canvas>
+
+<div>
+    <div style="position:absolute;top:60px;left:10px;">Choose Color</div>
+    <div style="position:absolute;top:80px;left:10px;width:10px;height:10px;background:green;" id="green" onclick="color(this)"></div>
+    <div style="position:absolute;top:80px;left:25px;width:10px;height:10px;background:blue;" id="blue" onclick="color(this)"></div>
+    <div style="position:absolute;top:80px;left:40px;width:10px;height:10px;background:red;" id="red" onclick="color(this)"></div>
+    <div style="position:absolute;top:95px;left:10px;width:10px;height:10px;background:yellow;" id="yellow" onclick="color(this)"></div>
+    <div style="position:absolute;top:95px;left:25px;width:10px;height:10px;background:orange;" id="orange" onclick="color(this)"></div>
+    <div style="position:absolute;top:95px;left:40px;width:10px;height:10px;background:black;" id="black" onclick="color(this)"></div>
+    <div style="position:absolute;top:120px;left:10px;">Eraser</div>
+    <div style="position:absolute;top:140px;left:10px;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
+
+    <div style="position:absolute;top:180px;left:10px;">
+
+        <div id="webchat-container" class="row">
+
+            <h3>Webchat</h3>
+
+            <div id="webchat-messages"></div>
+
+            <div id="webchat-input">
+
+                <div class="input-control text">
+                    <input class="wide input" type="text" placeholder="Type a message..." id="message-input-msg" />
+                    <a href="#" id="message-input-confirm"><button class="btn-clear"></button></a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<input type="button" value="clear" id="clr" size="23" onclick="erase()" style="display: block; margin: auto; margin-top: 10px;">
+
+<script>
+    $(document).ready(function() {
+        init();
+    });
+</script>
+
+</body>
+
+</html>

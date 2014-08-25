@@ -1,0 +1,21 @@
+li {
+    list-style-type: none;
+}
+
+#canvasDiv {
+    border: 1px solid red;
+}
+
+#webchat-messages {
+    border: 1px solid #CCC;
+    border-bottom: none;
+    width: 200px;
+    overflow: auto;
+    height: 300px;
+    font-size: 0.8em;
+    padding: 5px;
+}
+
+#webchat-input {
+    margin-top: 0px;
+}
