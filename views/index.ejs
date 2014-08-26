@@ -24,42 +24,51 @@
     </nav>
 </div>
 
-<canvas id="can" width="960" height="590" style="border:2px dashed cornflowerblue;margin-top:20px;display: block;margin-left: auto; margin-right: auto;"></canvas>
+<div id="tools-container">
 
-<div>
-    <div style="position:absolute;top:60px;left:10px;">Choose Color</div>
-    <div style="position:absolute;top:80px;left:10px;width:10px;height:10px;background:green;" id="green" onclick="color(this)"></div>
-    <div style="position:absolute;top:80px;left:25px;width:10px;height:10px;background:blue;" id="blue" onclick="color(this)"></div>
-    <div style="position:absolute;top:80px;left:40px;width:10px;height:10px;background:red;" id="red" onclick="color(this)"></div>
-    <div style="position:absolute;top:95px;left:10px;width:10px;height:10px;background:yellow;" id="yellow" onclick="color(this)"></div>
-    <div style="position:absolute;top:95px;left:25px;width:10px;height:10px;background:orange;" id="orange" onclick="color(this)"></div>
-    <div style="position:absolute;top:95px;left:40px;width:10px;height:10px;background:black;" id="black" onclick="color(this)"></div>
-    <div style="position:absolute;top:120px;left:10px;">Eraser</div>
-    <div style="position:absolute;top:140px;left:10px;width:15px;height:15px;background:white;border:2px solid;" id="white" onclick="color(this)"></div>
+    <h3><i class="icon-stats"></i> Choose Color</h3>
 
-    <div style="position:absolute;top:180px;left:10px;">
+    <div style="background:green;" class="tool-item-color" id="green" onclick="color(this)"></div>
+    <div style="background:blue;" class="tool-item-color" id="blue" onclick="color(this)"></div>
+    <div style="background:red;" class="tool-item-color" id="red" onclick="color(this)"></div>
+    <div style="background:yellow;" class="tool-item-color" id="yellow" onclick="color(this)"></div>
+    <div style="background:orange;" class="tool-item-color" id="orange" onclick="color(this)"></div>
+    <div style="background:black;" class="tool-item-color" id="black" onclick="color(this)"></div>
 
-        <div id="webchat-container" class="row">
+    <div style="clear:both;"></div>
 
-            <h3>Webchat</h3>
+    <hr>
 
-            <div id="webchat-messages"></div>
+    <h3><i class="icon-battery-empty"></i> Eraser</h3>
 
-            <div id="webchat-input">
+    <div style="background:white;" class="tool-item-color eraser" id="white" onclick="color(this)"></div>
 
-                <div class="input-control text">
-                    <input class="wide input" type="text" placeholder="Type a message..." id="message-input-msg" />
-                    <a href="#" id="message-input-confirm"><button class="btn-clear"></button></a>
-                </div>
+    <div style="clear:both;"></div>
 
-            </div>
+    <hr>
 
+    <input type="button" value="Clear" id="clr" size="23" onclick="erase()" style="display: block; margin: auto; margin-top: 10px;">
+
+</div>
+
+<div id="webchat-container" class="row">
+
+    <h3><i class="icon-rocket"></i> Webchat</h3>
+
+    <div id="webchat-messages"></div>
+
+    <div id="webchat-input">
+
+        <div class="input-control text">
+            <input class="wide input" type="text" placeholder="Type a message..." id="message-input-msg" />
+            <a href="#" id="message-input-confirm"><button class="btn-clear"></button></a>
         </div>
 
     </div>
+
 </div>
 
-<input type="button" value="clear" id="clr" size="23" onclick="erase()" style="display: block; margin: auto; margin-top: 10px;">
+<canvas id="can" width="960" height="590" style="border:2px dashed cornflowerblue;margin-top:20px;display: block;margin-left: auto; margin-right: auto;"></canvas>
 
 <script>
     $(document).ready(function() {

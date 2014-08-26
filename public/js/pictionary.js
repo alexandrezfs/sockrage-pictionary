@@ -13,7 +13,7 @@ var x = "black",
 
 var sockRagePictionary = new SockRage("http://localhost:3000", "pictionary");
 var canvasId = null;
-
+var browserId = null;
 
 /**
  * INIT CANVAS
@@ -38,13 +38,10 @@ function init() {
     }, false);
 
 
-
     /**
      * SOCKRAGE LISTENERS
      */
     sockRagePictionary.on('update', function(data) {
-
-        console.log(data);
 
         sockRagePictionary.get(canvasId);
 
@@ -52,16 +49,14 @@ function init() {
 
     sockRagePictionary.on('getById', function(data) {
 
-        console.log(data);
-
-        if(data.img_uri != null) {
+        if(data.img_uri != null && (data.browser_id != browserId) || browserId == null) {
             updateCanvas(data.img_uri);
+            browserId = Math.random();
         }
 
     });
 
     sockRagePictionary.on('getAll', function(data) {
-        console.log(data);
 
         if(data[0] != null) {
             canvasId = data[0]._id;
@@ -70,7 +65,8 @@ function init() {
         else {
             sockRagePictionary.set({
                 img_uri : null,
-                author : null
+                author : null,
+                browser_id : null
             });
         }
     });
@@ -128,9 +124,17 @@ function draw() {
 }
 
 function erase() {
-    var m = confirm("Want to clear");
+    var m = confirm("Want to clear the panel area ?");
     if (m) {
-        ctx.clearRect(0, 0, w, h);
+
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.rect(0, 0, w, h);
+        ctx.fill();
+        ctx.closePath();
+
+        save();
+
     }
 }
 
@@ -143,7 +147,8 @@ function save() {
 
     sockRagePictionary.update(canvasId, {
         img_uri : dataURL,
-        author : username
+        author : username,
+        browser_id : browserId
     });
 
 }
@@ -154,8 +159,6 @@ function save() {
  */
 function updateCanvas(dataURL) {
 
-    console.log("update IMG !");
-
     var img = new Image;
 
     img.onload = function(){
@@ -163,7 +166,6 @@ function updateCanvas(dataURL) {
     };
 
     img.src = dataURL;
-
 }
 
 /**
