@@ -11,14 +11,17 @@ var canvas, ctx, flag = false,
 var x = "black",
     y = 2;
 
-var sockRagePictionary = new SockRage("http://localhost:3000", "pictionary");
+var sockRagePictionary = null;
 var canvasId = null;
 var browserId = null;
 
 /**
  * INIT CANVAS
  */
-function init() {
+function init(sockrage_addr, db_name) {
+
+    sockRagePictionary = new SockRage(sockrage_addr, db_name);
+
     canvas = document.getElementById('can');
     ctx = canvas.getContext("2d");
     w = canvas.width;

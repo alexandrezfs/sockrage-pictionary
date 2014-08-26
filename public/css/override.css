@@ -57,3 +57,11 @@ li {
 .eraser {
     border: 2px dotted #000000;
 }
+
+.draw-panel {
+    border:2px dashed cornflowerblue;
+    margin-top:20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

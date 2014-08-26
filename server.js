@@ -1,7 +1,12 @@
+/**
+ * GLOBAL VARS
+ * @type {exports}
+ */
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = module.exports.app = express();
 var server = require('http').Server(app);
+var config = require('./config');
 
 /**
  * App settings
@@ -16,13 +21,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
  */
 app.route('/').get(function(req, res) {
 
-    res.render('index');
+    res.render('index', {
+        sockrage_addr : config.configObject.sockrage_addr,
+        db_name : config.configObject.db_name
+    });
 
 });
 
 /**
  * LISTEN SERVER
  */
-server.listen(3003, function() {
-    console.log("Server started");
+server.listen(config.configObject.server_port, function() {
+    console.log("Express server started on port " + config.configObject.server_port);
 });

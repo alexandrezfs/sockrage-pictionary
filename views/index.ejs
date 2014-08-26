@@ -68,11 +68,11 @@
 
 </div>
 
-<canvas id="can" width="960" height="590" style="border:2px dashed cornflowerblue;margin-top:20px;display: block;margin-left: auto; margin-right: auto;"></canvas>
+<canvas id="can" width="960" height="590" class="draw-panel"></canvas>
 
 <script>
     $(document).ready(function() {
-        init();
+        init('<%= sockrage_addr %>', '<%= db_name %>');
     });
 </script>
 
