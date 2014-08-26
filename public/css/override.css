@@ -28,7 +28,7 @@ li {
     right:10px;
     border: 1px solid #CCC;
     background-color: #ffffff;
-    z-index: 9999;
+    z-index: 9;
 }
 
 #webchat-container h3 {
@@ -43,7 +43,7 @@ li {
     border-top: 1px solid #CCC;
     border-right: 1px solid #CCC;
     background-color: #ffffff;
-    z-index: 9999;
+    z-index: 9;
     padding: 5px;
 }
 
@@ -59,8 +59,8 @@ li {
 }
 
 .draw-panel {
-    border:2px dashed cornflowerblue;
-    margin-top:20px;
+    border: 2px dashed cornflowerblue;
+    margin-top: 20px;
     display: block;
     margin-left: auto;
     margin-right: auto;

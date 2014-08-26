@@ -2,10 +2,17 @@
  * Global VARS
  * @type {*}
  */
-var username = prompt("WELCOME ! Please choose a username.");
 
-if(username == null || username.length == 0)
-    username = 'Anonymous';
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+var username = 'Anonymous';
 
 var sockRageWebchat = new SockRage("http://localhost:3000", "webchatmessages");
 
@@ -68,12 +75,28 @@ sockRageWebchat.on("create", function(data) {
 $(document).ready(function() {
 
     /**
-     * Signal the system that someone logged in
+     * Choose username prompt
      */
-    sockRageWebchat.set({
-        datetime : new Date(Date.now()),
-        username : "SYSTEM",
-        message : username + " Just joined the game..."
+    smoke.prompt('what\'s my name?',function(e){
+        if (e){
+            username = e;
+            toastr.success("You're logged in as " + username);
+        }
+        else {
+            toastr.info("You're logged in as " + username);
+        }
+
+        /**
+         * Signal the system that someone logged in
+         */
+        sockRageWebchat.set({
+            datetime : new Date(Date.now()),
+            username : "SYSTEM",
+            message : "<span style='color:orangered'>" + username + " Just joined the game...</span>"
+        });
+
+        $("#username-place").html('Connected as <strong>' + username + '</strong>');
+
     });
 
     /**
@@ -99,8 +122,8 @@ $(document).ready(function() {
 
             sockRageWebchat.set({
                 datetime : new Date(Date.now()),
-                username : username,
-                message : $("#message-input-msg").val()
+                username : htmlentities(username),
+                message : htmlentities($("#message-input-msg").val())
             });
 
         }
@@ -112,3 +135,9 @@ $(document).ready(function() {
     });
 
 });
+
+function htmlentities(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
+}

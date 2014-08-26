@@ -3,14 +3,18 @@
 <head>
     <link rel="stylesheet" href="/bower_components/metro-ui-css/min/metro-bootstrap.min.css">
     <link rel="stylesheet" href="/css/override.css">
+    <link rel="stylesheet" href="/bower_components/smoke.js/smoke.css">
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/jquery/dist/jquery.widget.js"></script>
     <script src="/bower_components/metro-ui-css/min/metro.min.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
+    <script src="/bower_components/smoke.js/smoke.js"></script>
+    <script src="/bower_components/toastr/toastr.min.js"></script>
     <script src="/js/sockrage/socket.io.js"></script>
     <script src="/js/sockrage/sockrage.js"></script>
     <script src="/js/pictionary.js"></script>
     <script src="/js/webchat.js"></script>
-    <script src="/bower_components/moment/min/moment.min.js"></script>
 </head>
 
 <body class="metro">
@@ -18,8 +22,12 @@
     <nav class="navigation-bar">
         <nav class="navigation-bar-content">
             <div class="element">
-                <span class="icon-grid-view"> ULTRASUPERNEW PICTIONARY</span>
+                <span class="icon-pencil"> ULTRASUPERNEW PICTIONARY</span>
             </div>
+            <span class="element-divider place-right"></span>
+            <a class="element place-right" href="https://github.com/ultrasupernew/sockrage" target="_blank"><span class="icon-github"></span> Fork Sockrage on GitHub !</a>
+            <span class="element-divider place-right"></span>
+            <button class="element image-button image-left place-right" id="username-place"></button>
         </nav>
     </nav>
 </div>

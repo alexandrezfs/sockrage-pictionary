@@ -20,8 +20,21 @@ var browserId = null;
  */
 function init(sockrage_addr, db_name) {
 
+    /**
+     * INIT SOCKRAGE SYNCHRONIZER
+     * @type {SockRage}
+     */
     sockRagePictionary = new SockRage(sockrage_addr, db_name);
 
+    /**
+     * Default color is black
+     */
+    $("#black").css('border', '2px solid #CCC');
+
+    /**
+     * Canvas configuration
+     * @type {HTMLElement}
+     */
     canvas = document.getElementById('can');
     ctx = canvas.getContext("2d");
     w = canvas.width;
@@ -83,6 +96,20 @@ function init(sockrage_addr, db_name) {
  * @param obj
  */
 function color(obj) {
+
+    var colors = ['green', 'blue', 'red', 'yellow', 'orange', 'black', 'white'];
+
+    for(var i = 0; i < colors.length; i++) {
+
+        $("#" + colors[i]).css('border', 'none');
+
+        if(colors[i] == 'white') {
+            $("#" + colors[i]).css('border', '2px dotted #000000');
+        }
+    }
+
+    $("#" + obj.id).css('border', '2px solid #CCC');
+
     switch (obj.id) {
         case "green":
             x = "green";
@@ -108,7 +135,6 @@ function color(obj) {
     }
     if (x == "white") y = 14;
     else y = 2;
-
 }
 
 /**
