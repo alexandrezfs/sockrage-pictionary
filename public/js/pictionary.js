@@ -18,7 +18,7 @@ var browserId = null;
 /**
  * INIT CANVAS
  */
-function init(sockrage_addr, db_name) {
+function initPictionary(sockrage_addr, db_name) {
 
     /**
      * INIT SOCKRAGE SYNCHRONIZER

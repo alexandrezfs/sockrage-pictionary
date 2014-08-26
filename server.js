@@ -23,7 +23,8 @@ app.route('/').get(function(req, res) {
 
     res.render('index', {
         sockrage_addr : config.configObject.sockrage_addr,
-        db_name : config.configObject.db_name
+        db_name_webchat : config.configObject.db_name_webchat,
+        db_name_pictionary : config.configObject.db_name_pictionary
     });
 
 });
