@@ -1,6 +1,6 @@
 /**
  * SOCKRAGE-PICTIONARY Configuration file
- * @type {{super_admin_password: string, server_port: number}}
+ * @type {{sockrage_addr: string, db_name: string, server_port: number}}
  */
 exports.configObject = {
     sockrage_addr : "http://localhost:3000",
