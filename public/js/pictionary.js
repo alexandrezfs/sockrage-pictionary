@@ -40,29 +40,84 @@ function initPictionary(sockrage_addr, db_name) {
     w = canvas.width;
     h = canvas.height;
 
+    /**
+     * MOUSE LISTENERS
+     */
     canvas.addEventListener("mousemove", function (e) {
-        findxy('move', e)
+
+        findxy('move', e);
+
+        if(flag) {
+
+            sockRagePictionary.broadcast('drawing-line', {
+                partnerColor : x,
+                partnerLineWidth : y,
+                partnerPrevX : prevX,
+                partnerPrevY : prevY,
+                partnerCurrX : currX,
+                partnerCurrY : currY
+            });
+
+        }
+
     }, false);
+
     canvas.addEventListener("mousedown", function (e) {
-        findxy('down', e)
+
+        findxy('down', e);
+
+        if(flag) {
+
+            sockRagePictionary.broadcast('drawing-point', {
+                partnerColor : x,
+                partnerLineWidth : y,
+                partnerCurrX : currX,
+                partnerCurrY : currY
+            });
+
+        }
+
     }, false);
+
     canvas.addEventListener("mouseup", function (e) {
-        findxy('up', e)
+
+        findxy('up', e);
+
     }, false);
+
     canvas.addEventListener("mouseout", function (e) {
-        findxy('out', e)
+
+        findxy('out', e);
+
     }, false);
 
 
     /**
-     * SOCKRAGE LISTENERS
+     * SOCKRAGE LSITENER - DRAW A LINE WHEN ONE RECEIVED
      */
-    sockRagePictionary.on('update', function(data) {
+    sockRagePictionary.on('drawing-line', function(data) {
 
-        sockRagePictionary.get(canvasId);
+        drawPartner(data.partnerColor,
+            data.partnerLineWidth,
+            data.partnerPrevX,
+            data.partnerPrevY,
+            data.partnerCurrX,
+            data.partnerCurrY);
 
     });
 
+    /**
+     * SOCKRAGE LISTENER - DRAW A POINT WHEN ONE RECEIVED
+     */
+    sockRagePictionary.on('drawing-point', function(data) {
+
+        drawPoint(data.partnerColor, data.partnerCurrX, data.partnerCurrY);
+
+    });
+
+    /**
+     * SOCKRAGE LSITENER - UPDATE CANVAS WHEN ARRIVING
+     */
     sockRagePictionary.on('getById', function(data) {
 
         if(data.img_uri != null && (data.browser_id != browserId) || browserId == null) {
@@ -72,11 +127,30 @@ function initPictionary(sockrage_addr, db_name) {
 
     });
 
+
+    /**
+     * SOCKRAGE LSITENER - CLEAR PANEL WHEN SOMEONE DOES IT
+     */
+    sockRagePictionary.on('clear-panel', function(data) {
+
+        clear();
+
+    });
+
+    /**
+     * SOCKRAGE LISTENER - REGISTER CANVAS IF NOT EXISTS, IF EXISTS GET CANVAS ID FOR FURTHER UPDATES
+     */
     sockRagePictionary.on('getAll', function(data) {
 
         if(data[0] != null) {
+
             canvasId = data[0]._id;
             sockRagePictionary.get(canvasId);
+
+            setInterval(function() {
+                save(); //update image every second
+            }, 1000);
+
         }
         else {
             sockRagePictionary.set({
@@ -84,6 +158,8 @@ function initPictionary(sockrage_addr, db_name) {
                 author : null,
                 browser_id : null
             });
+
+            sockRagePictionary.list();
         }
     });
 
@@ -148,23 +224,59 @@ function draw() {
     ctx.lineWidth = y;
     ctx.stroke();
     ctx.closePath();
-
-    save();
 }
 
+/**
+ * DRAWING SOMETHING ON THE CANVAS - FROM SOCKET
+ */
+function drawPartner(partnerColor, partnerLineWidth, partnerPrevX, partnerPrevY, partnerCurrX, partnerCurrY) {
+
+    ctx.beginPath();
+    ctx.moveTo(partnerPrevX, partnerPrevY);
+    ctx.lineTo(partnerCurrX, partnerCurrY);
+    ctx.strokeStyle = partnerColor;
+    ctx.lineWidth = partnerLineWidth;
+    ctx.stroke();
+    ctx.closePath();
+
+}
+
+/**
+ * DRAW A POINT ON THE PANEL
+ * @param color
+ * @param currX
+ * @param currY
+ */
+function drawPoint(color, currX, currY) {
+
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.fillRect(currX, currY, 2, 2);
+    ctx.closePath();
+    dot_flag = false;
+
+}
+
+/**
+ * CLEAR PANEL FN
+ */
 function erase() {
     var m = confirm("Want to clear the panel area ?");
     if (m) {
+        clear();
 
-        ctx.beginPath();
-        ctx.fillStyle = 'white';
-        ctx.rect(0, 0, w, h);
-        ctx.fill();
-        ctx.closePath();
-
-        save();
-
+        sockRagePictionary.broadcast('clear-panel', {});
     }
+}
+
+function clear() {
+
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.rect(0, 0, w, h);
+    ctx.fill();
+    ctx.closePath();
+
 }
 
 /**
@@ -203,7 +315,9 @@ function updateCanvas(dataURL) {
  * @param e
  */
 function findxy(res, e) {
+
     if (res == 'down') {
+
         prevX = currX;
         prevY = currY;
         currX = e.clientX - canvas.offsetLeft;
@@ -211,18 +325,18 @@ function findxy(res, e) {
 
         flag = true;
         dot_flag = true;
+
         if (dot_flag) {
-            ctx.beginPath();
-            ctx.fillStyle = x;
-            ctx.fillRect(currX, currY, 2, 2);
-            ctx.closePath();
+            drawPoint(x, currX, currY);
             dot_flag = false;
         }
+
     }
     if (res == 'up' || res == "out") {
         flag = false;
     }
     if (res == 'move') {
+
         if (flag) {
             prevX = currX;
             prevY = currY;
@@ -231,4 +345,5 @@ function findxy(res, e) {
             draw();
         }
     }
+
 }
