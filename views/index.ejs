@@ -59,7 +59,19 @@
 
     <hr>
 
-    <input type="button" value="Clear" id="clr" size="23" onclick="erase()" style="display: block; margin: auto; margin-top: 10px;">
+    <h3><i class="icon-compass"></i> Options</h3>
+
+    <div class="option-container">
+        <button id="clr" onclick="erase()" class="command-button small">
+            <i class="icon-clipboard-2 on-left"></i>
+            Clear panel
+        </button>
+        <br>
+        <button id="toggleDrawBtn" onclick="autoDrawToggle()" class="command-button small">
+            <i class="icon-share-3 on-left"></i>
+            Automatic Drawing
+        </button>
+    </div>
 
 </div>
 

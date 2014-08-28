@@ -62,3 +62,7 @@ li {
     margin-right: auto;
     cursor: crosshair;
 }
+
+.option-container button {
+    margin-bottom: 3px;
+}

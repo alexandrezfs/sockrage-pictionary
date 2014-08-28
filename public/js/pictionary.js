@@ -6,6 +6,7 @@ var canvas, ctx, flag = false,
     currX = 0,
     prevY = 0,
     currY = 0,
+    w, h,
     dot_flag = false;
 
 var x = "black",
@@ -14,6 +15,21 @@ var x = "black",
 var sockRagePictionary = null;
 var canvasId = null;
 var browserId = null;
+var autoDrawing = false;
+
+/**
+ * AUTO DRAWING POSITIONS
+ * @type {{prevX: number, currX: number, prevY: number, currY: number}}
+ */
+var autoDrawData = {
+    prevX : 0,
+    currX : 0,
+    prevY : 0,
+    currY : 0,
+    interval : null,
+    previousDirection : 1
+};
+
 
 /**
  * INIT CANVAS
@@ -39,6 +55,15 @@ function initPictionary(sockrage_addr, db_name) {
     ctx = canvas.getContext("2d");
     w = canvas.width;
     h = canvas.height;
+
+    /**
+     * INITIALIZE AUTO DRAWING POSITIONS
+     * @type {Number}
+     */
+    autoDrawData.prevX = parseInt(w / 2);
+    autoDrawData.prevY = parseInt(h / 2);
+    autoDrawData.currX = parseInt(w / 2);
+    autoDrawData.currY = parseInt(h / 2);
 
     /**
      * MOUSE LISTENERS
@@ -168,6 +193,101 @@ function initPictionary(sockrage_addr, db_name) {
 }
 
 /**
+ * AUTO DRAWING TOGGLE VALUE (ACTIVATE OR DISABLE)
+ */
+function autoDrawToggle() {
+
+    if(autoDrawing) {
+        autoDrawing = false;
+
+        $("#toggleDrawBtn").removeClass("primary");
+
+        clearInterval(autoDrawData.interval);
+    }
+    else {
+        autoDrawing = true;
+
+        $("#toggleDrawBtn").addClass("primary");
+
+        autoDrawData.interval = setInterval(function() {
+            autoDraw();
+        }, 50);
+    }
+
+}
+
+/**
+ * AUTO DRAW SOMETHING ON THE PANEL
+ */
+function autoDraw() {
+
+    var random = Math.floor(Math.random() * 5) + 1;
+
+    if(autoDrawData.previousDirection == random) {
+        autoDraw();
+    }
+    else {
+
+        if(random == 2) {
+            autoDrawData.currX = autoDrawData.currX + 4;
+        }
+        else if(random == 3) {
+            autoDrawData.currX = autoDrawData.currX - 4;
+        }
+        else if(random == 4) {
+            autoDrawData.currY = autoDrawData.currY + 4;
+        }
+        else if(random == 5) {
+            autoDrawData.currY = autoDrawData.currY - 4;
+        }
+
+        if(autoDrawData.currX < w
+            && autoDrawData.currX > 0
+            && autoDrawData.currY < h
+            && autoDrawData.currY > 0) {
+
+            ctx.beginPath();
+            ctx.moveTo(autoDrawData.prevX, autoDrawData.prevY);
+            ctx.lineTo(autoDrawData.currX, autoDrawData.currY);
+            ctx.strokeStyle = x;
+            ctx.lineWidth = y;
+            ctx.stroke();
+            ctx.closePath();
+
+            sockRagePictionary.broadcast('drawing-line', {
+                partnerColor : x,
+                partnerLineWidth : y,
+                partnerPrevX : autoDrawData.prevX,
+                partnerPrevY : autoDrawData.prevY,
+                partnerCurrX : autoDrawData.currX,
+                partnerCurrY : autoDrawData.currY
+            });
+
+            autoDrawData.prevX = autoDrawData.currX;
+            autoDrawData.prevY = autoDrawData.currY;
+
+        }
+        else {
+            reInitAutoDrawingRandom();
+        }
+    }
+}
+
+/**
+ * RE INIT THE AUTO DRAWING BOT WHEN IT GETS A WALL
+ */
+function reInitAutoDrawingRandom() {
+
+    var randomWidth = Math.floor((Math.random() * w) + 1);
+    var randomHeight = Math.floor((Math.random() * w) + 1);
+
+    autoDrawData.prevX = parseInt(randomWidth);
+    autoDrawData.prevY = parseInt(randomHeight);
+    autoDrawData.currX = parseInt(randomWidth);
+    autoDrawData.currY = parseInt(randomHeight);
+}
+
+/**
  * COLOR FN
  * @param obj
  */
@@ -217,6 +337,7 @@ function color(obj) {
  * DRAWING SOMETHING ON THE CANVAS
  */
 function draw() {
+
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
